@@ -11,10 +11,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="staff-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Create Staff', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Add Staff', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

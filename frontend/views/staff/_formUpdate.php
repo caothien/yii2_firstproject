@@ -29,7 +29,7 @@ use kartik\file\FileInput;
 
                 <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
 
-                <?= $form->field($model, 'position')->dropDownList(['Sep' => 'Sep', 'Nhan vien' => 'Nhan vien'],['prompt'=>'Select Option']) ?>
+                <?= $form->field($model, 'position')->textInput(['maxlength' => true]) ?>
 
                 <?= $form->field($model, 'avatar')->widget(FileInput::classname(), ['options' => ['accept' => 'image/*'],]) ?>
 

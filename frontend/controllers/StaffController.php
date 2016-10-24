@@ -36,8 +36,11 @@ class StaffController extends Controller
      */
     public function actionIndex()
     {
+        $staffs = Staff::find();
+
         $dataProvider = new ActiveDataProvider([
-            'query' => Staff::find(),
+            'query' => $staffs,
+            'pagination' => ['pageSize' => 2],
         ]);
 
         return $this->render('index', [
@@ -67,18 +70,28 @@ class StaffController extends Controller
         $model = new Staff();
 
         if ($model->load(Yii::$app->request->post())) {
+
             $fileUpload = UploadedFile::getInstance($model, 'avatar');
             if(empty($fileUpload)){
                 $model->avatar = 'default.png';
-            }else{
-                $model->avatar = Yii::$app->security->generateRandomString(30).'.'.$fileUpload->extension;
-            }   
-            if ($model->validateStaff() && $model->save()) {
-                if(!empty($fileUpload)){
-                    $fileUpload->saveAs('images/' . $model->avatar);
-                }               
+                $model->save();
                 return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                $model->avatar = UploadedFile::getInstance($model, 'avatar');
+
+                if ($model->avatar && $model->validate()) {                
+                    $model->avatar->saveAs('images/' . Yii::$app->security->generateRandomString(30) . '.' . $model->avatar->extension);
+                    // $model->avatar = 'ddd';
+                }   
+                if ($model->validate() && $model->save()) {           
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }else{
+                    return $this->render('create', [
+                    'model' => $model,
+                ]);
+                }
             }
+           
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -106,6 +119,7 @@ class StaffController extends Controller
                 }              
                 $model->avatar = Yii::$app->security->generateRandomString(30).'.'.$fileUpload->extension;
             }   
+
             if ($model->validateStaff() && $model->save()) {
                 if(!empty($fileUpload)){
                     $fileUpload->saveAs('images/' . $model->avatar);

@@ -7,9 +7,9 @@ $this->title = 'My Yii Application';
 <div class="site-index">
 
     <div class="jumbotron">
-        <h1>Welcome to Yii 2 !!!</h1>
+        <h1>Welcome to Rikkei Soft DaNang !</h1>
 
-        <?= Html::a('Staff Manager System', ['/staff'], ['class'=>'btn btn-lg btn-success']) ?>
+    	<?= Html::img('images/image.jpg', ['class' => 'img-thumbnail']);?>
     </div>
 
 </div>

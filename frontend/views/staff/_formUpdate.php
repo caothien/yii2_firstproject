@@ -25,11 +25,11 @@ use kartik\file\FileInput;
 
                 <?= $form->field($model, 'age')->textInput() ?>
 
-                <?= $form->field($model, 'gender')->radioList(['Nam'=>'Nam', 'Nu' =>'Nu'])->label('Gender'); ?>
+                <?= $form->field($model, 'gender')->radioList(['Male'=>'Male', 'Female' =>'Female'])->label('Gender'); ?>
 
                 <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
 
-                <?= $form->field($model, 'position')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'position')->dropDownList(['Director' => 'Director', 'Project Manager' => 'Project Manager', 'Team Leader' => 'Team Leader', 'Bridge System Engineer' => 'Bridge System Engineer', 'Accountant' => 'Accountant', 'Developer' => 'Developer', 'Internship' => 'Internship'], ['prompt' => 'Select position']) ?>
 
                 <?= $form->field($model, 'avatar')->widget(FileInput::classname(), ['options' => ['accept' => 'image/*'],]) ?>
 

@@ -73,8 +73,7 @@ class StaffController extends Controller
             }else{
                 $model->avatar = Yii::$app->security->generateRandomString(30).'.'.$fileUpload->extension;
             }   
-            $model->save();
-            if ($model->validateStaff()) {
+            if ($model->validateStaff() && $model->save()) {
                 if(!empty($fileUpload)){
                     $fileUpload->saveAs('images/' . $model->avatar);
                 }               
@@ -107,8 +106,7 @@ class StaffController extends Controller
                 }              
                 $model->avatar = Yii::$app->security->generateRandomString(30).'.'.$fileUpload->extension;
             }   
-            $model->save();
-            if ($model->validateStaff()) {
+            if ($model->validateStaff() && $model->save()) {
                 if(!empty($fileUpload)){
                     $fileUpload->saveAs('images/' . $model->avatar);
                 }               

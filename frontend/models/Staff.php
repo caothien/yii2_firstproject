@@ -37,7 +37,7 @@ class Staff extends \yii\db\ActiveRecord
             [['name', 'age', 'gender', 'address', 'position'], 'required'],
             [['age', 'created_at', 'updated_at'], 'integer'],
             [['name', 'gender', 'address', 'position'], 'string', 'max' => 255],
-            [['avatar'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxSize'=> 10*1024*1024],
+            [['avatar'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxSize'=> 1024*1024],
         ];
     }
 

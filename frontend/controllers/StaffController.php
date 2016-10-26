@@ -68,34 +68,32 @@ class StaffController extends Controller
     public function actionCreate()
     {
         $model = new Staff();
-
         if ($model->load(Yii::$app->request->post())) {
-
             $fileUpload = UploadedFile::getInstance($model, 'avatar');
             if(empty($fileUpload)){
                 $model->avatar = 'default.png';
-                $model->save();
-                return $this->redirect(['view', 'id' => $model->id]);
             }else{
-                $model->avatar = UploadedFile::getInstance($model, 'avatar');
-
-                if ($model->avatar && $model->validate()) {                
-                    $model->avatar->saveAs('images/' . Yii::$app->security->generateRandomString(30) . '.' . $model->avatar->extension);
-                    // $model->avatar = 'ddd';
-                }   
-                if ($model->validate() && $model->save()) {           
-                    return $this->redirect(['view', 'id' => $model->id]);
+                $model->avatar = $fileUpload;
+                if($model->validate()){
+                    $model->avatar = Yii::$app->security->generateRandomString(30).'.'.$model->avatar->extension;
+                    $model->avatar->resize(100, 100);   
                 }else{
                     return $this->render('create', [
                     'model' => $model,
                 ]);
-                }
+                }                
             }
-           
+            if ($model->save()) {
+                if(!empty($fileUpload)){
+                    $fileUpload->resize(100, 100);
+                    $fileUpload->saveAs('images/' . $model->avatar);
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
-            ]);
+                ]);
         }
     }
 
@@ -114,13 +112,21 @@ class StaffController extends Controller
             if(empty($fileUpload)){
                 $model->avatar = $oldImage;
             }else{
-                if($oldImage != 'default.png'){
-                    @unlink("images/".$oldImage);
-                }              
+                $model->avatar = UploadedFile::getInstance($model, 'avatar');
+                if($model->validate()){
+                    if($oldImage != 'default.png'){
+                        @unlink("images/".$oldImage);
+                    }              
                 $model->avatar = Yii::$app->security->generateRandomString(30).'.'.$fileUpload->extension;
+                }else{
+                    return $this->render('create', [
+                    'model' => $model,
+                ]);
+                } 
+                
             }   
 
-            if ($model->validateStaff() && $model->save()) {
+            if ($model->save()) {
                 if(!empty($fileUpload)){
                     $fileUpload->saveAs('images/' . $model->avatar);
                 }               

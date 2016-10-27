@@ -19,17 +19,17 @@ use kartik\file\FileInput;
 
                 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-                <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label('Name (*)') ?>
 
-                <?= $form->field($model, 'age')->textInput() ?>
+                <?= $form->field($model, 'age')->textInput()->label('Age (*)') ?>
 
-                <?= $form->field($model, 'gender')->radioList(['Male'=>'Male', 'Female' =>'Female'])->label('Gender'); ?>
+                <?= $form->field($model, 'gender')->radioList(['Male'=>'Male', 'Female' =>'Female'])->label('Gender (*)'); ?>
 
-                <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'address')->textInput(['maxlength' => true])->label('Address (*)') ?>
 
-                <?= $form->field($model, 'position')->dropDownList(['Director' => 'Director', 'Project Manager' => 'Project Manager', 'Team Leader' => 'Team Leader', 'Bridge System Engineer' => 'Bridge System Engineer', 'Accountant' => 'Accountant', 'Developer' => 'Developer', 'Internship' => 'Internship'], ['prompt' => 'Select position']) ?>
+                <?= $form->field($model, 'position')->dropDownList(['Director' => 'Director', 'Project Manager' => 'Project Manager', 'Team Leader' => 'Team Leader', 'Bridge System Engineer' => 'Bridge System Engineer', 'Accountant' => 'Accountant', 'Developer' => 'Developer', 'Internship' => 'Internship'], ['prompt' => 'Select position'])->label('Position (*)') ?>
 
-                <?= $form->field($model, 'avatar')->widget(FileInput::classname(), ['options' => ['accept' => 'image/*'],]) ?>
+                <?= $form->field($model, 'avatar')->widget(FileInput::classname(), ['options' => ['accept' => 'image/*'],])->label('Avatar') ?>
 
                 <div class="form-group">
                     <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

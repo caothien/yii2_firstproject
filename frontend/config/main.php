@@ -36,6 +36,19 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'i18n' => [
+            'translations' => [
+                'yii' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    
+                    'basePath' => '@approot/messages'
+                ],
+                '*' => [
+                        'class' => 'yii\i18n\PhpMessageSource',
+                        'basePath' => '@approot/messages',
+                    ]
+                ]
+        ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,

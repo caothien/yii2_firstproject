@@ -9,7 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-
+use yii\filters\AccessControl;
 /**
  * StaffController implements the CRUD actions for Staff model.
  */
@@ -25,6 +25,38 @@ class StaffController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['view'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['update'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -65,37 +97,34 @@ class StaffController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
+
     public function actionCreate()
     {
         $model = new Staff();
-
         if ($model->load(Yii::$app->request->post())) {
-
             $fileUpload = UploadedFile::getInstance($model, 'avatar');
             if(empty($fileUpload)){
                 $model->avatar = 'default.png';
-                $model->save();
-                return $this->redirect(['view', 'id' => $model->id]);
             }else{
-                $model->avatar = UploadedFile::getInstance($model, 'avatar');
-
-                if ($model->avatar && $model->validate()) {                
-                    $model->avatar->saveAs('images/' . Yii::$app->security->generateRandomString(30) . '.' . $model->avatar->extension);
-                    // $model->avatar = 'ddd';
-                }   
-                if ($model->validate() && $model->save()) {           
-                    return $this->redirect(['view', 'id' => $model->id]);
+                $model->avatar = $fileUpload;
+                if($model->validate()){
+                    $model->avatar = Yii::$app->security->generateRandomString(30).'.'.$model->avatar->extension;
                 }else{
                     return $this->render('create', [
-                    'model' => $model,
-                ]);
+                        'model' => $model,
+                        ]);
                 }
             }
-           
+            if ($model->save()) {
+                if(!empty($fileUpload)){
+                    $fileUpload->saveAs('images/' . $model->avatar);
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
-            ]);
+                ]);
         }
     }
 
@@ -109,21 +138,27 @@ class StaffController extends Controller
     {
         $model = $this->findModel($id);
         $oldImage = $model->avatar;
-        if ($model->load(Yii::$app->request->post())) {          
+        if ($model->load(Yii::$app->request->post())) {
             $fileUpload = UploadedFile::getInstance($model, 'avatar');
             if(empty($fileUpload)){
                 $model->avatar = $oldImage;
             }else{
-                if($oldImage != 'default.png'){
-                    @unlink("images/".$oldImage);
-                }              
-                $model->avatar = Yii::$app->security->generateRandomString(30).'.'.$fileUpload->extension;
-            }   
-
-            if ($model->validateStaff() && $model->save()) {
+                $model->avatar = UploadedFile::getInstance($model, 'avatar');
+                if($model->validate()){
+                    if($oldImage != 'default.png'){
+                        @unlink("images/".$oldImage);
+                    }
+                    $model->avatar = Yii::$app->security->generateRandomString(30).'.'.$fileUpload->extension;
+                }else{
+                    return $this->render('create', [
+                        'model' => $model,
+                        ]);
+                }
+            }
+            if ($model->save()) {
                 if(!empty($fileUpload)){
                     $fileUpload->saveAs('images/' . $model->avatar);
-                }               
+                }
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {

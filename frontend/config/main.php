@@ -36,19 +36,17 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'i18n' => [
-            'translations' => [
-                'yii' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    
-                    'basePath' => '@approot/messages'
-                ],
-                '*' => [
-                        'class' => 'yii\i18n\PhpMessageSource',
-                        'basePath' => '@approot/messages',
-                    ]
-                ]
-        ],
+        'mail' => [
+         'class' => 'yii\swiftmailer\Mailer',
+         'transport' => [
+             'class' => 'Swift_SmtpTransport',
+             'host' => 'smtp.gmail.com',  // e.g. smtp.mandrillapp.com or smtp.gmail.com
+             'username' => 'thanhnienxbd@gmail.com',
+             'password' => 'binhduong123',
+             'port' => '587', // Port 25 is a very common port too
+             'encryption' => 'tls', // It is often used, check your provider or mail server specs
+         ],
+     ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,

@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
+use app\models\StaffSearch;
 /**
  * StaffController implements the CRUD actions for Staff model.
  */
@@ -68,16 +69,24 @@ class StaffController extends Controller
      */
     public function actionIndex()
     {
-        $staffs = Staff::find();
+        // $staffs = Staff::find();
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $staffs,
-            'pagination' => ['pageSize' => 2],
-        ]);
+        // $dataProvider = new ActiveDataProvider([
+        //     'query' => $staffs,
+        //     'pagination' => ['pageSize' => 2],
+        // ]);
+
+        // return $this->render('index', [
+        //     'dataProvider' => $dataProvider,
+        // ]);
+
+        $searchModel = new StaffSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
+            ]);
     }
 
     /**
